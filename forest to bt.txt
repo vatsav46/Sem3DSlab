@@ -1,0 +1,97 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define COUNT 10
+
+struct node{
+	int key;
+	node* left;
+	node* sib;
+};
+void print2D(node *root, int space) 
+{ 
+    if (root == NULL) 
+        return; 
+    space += COUNT; 
+    print2D(root->sib, space); 
+    printf("\n"); 
+    for (int i = COUNT; i < space; i++) 
+        printf(" "); 
+    printf("%d\n", root->key); 
+    print2D(root->left, space); 
+
+}
+
+node* makenode(int key)
+{
+	node* temp=(node*)malloc(sizeof(node));
+	temp->left=NULL;
+	temp->sib=NULL;
+	temp->key=key;
+	return temp;
+}
+node* insert(node* root)
+{
+	int r,c,i;
+	node* temp;
+	node* t;
+			printf("Enter the no. of children of %d ",root->key);
+			scanf("%d",&c);
+			if(c==0)
+				return root;
+			for(i=0;i<c;i++)
+			{
+				printf("Enter the child ");
+				scanf("%d",&r);
+				if(i==0)
+				{
+					root->left=makenode(r);
+					t=root->left;
+				}
+				
+				else
+				{
+					t->sib=makenode(r);
+					t=t->sib;
+				}
+				
+			}
+			t=root->left;
+			while(t!=NULL)
+			{
+				t=insert(t);
+				t=t->sib;
+			}
+			return root;
+}
+main()
+{
+	node* froot[5];
+	int n,i,t;
+	while(1)
+	{
+		printf("1.Insert\n2.Make binary tree\n");
+		scanf("%d",&n);
+		switch(n)
+		{
+			case 1:
+				printf("Enter the no. of trees ");
+				scanf("%d",&t);
+				for(i=0;i<t;i++)
+				{
+					printf("\nEnter root value\n");
+					scanf("%d",&n);
+					froot[i]=makenode(n);
+					froot[i]=insert(froot[i]);
+				}
+				break;
+			case 2:
+				for(i=0;i<t-1;i++)
+				{
+					froot[i]->sib=froot[i+1];
+				}
+			case 3:
+				print2D(froot[0],0);
+				break;
+		}
+	}
+}
