@@ -1,0 +1,62 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct stack{
+	int top;
+	int a[100];
+};
+
+int ad[10][10];
+int n,k;
+
+void push(stack* p,int key){
+	for(k = 0;k<=p->top;k++){
+		if(p->a[k] == key)
+		return;
+	}
+	p->a[++p->top] = key;
+}
+
+int pop(stack* p){
+	return p->a[p->top--];
+}
+
+void topo(stack* p,int d){
+	int j;
+	for(j=0;j<n;j++){
+		if(ad[d][j] == 1){
+			topo(p,j);			
+		}
+	}
+    
+    push(p,d);
+		
+}
+
+int main(){
+	int i,j;
+	stack s;
+	stack* p = &s;
+	p->top = -1;
+	printf("enter no.of nodes\n");
+	scanf("%d",&n);
+	printf("enter adjacency matrix\n");
+	for(i = 0; i< n; i++){
+		for(j = 0; j< n;j++){
+			scanf("%d",&ad[i][j]);
+		}
+	}
+	
+	for(i = 0;i<n;i++){
+		topo(p,i);
+	}
+	
+	printf("the topological order is \n");
+	
+	for(i = p->top;i>=0;i--){
+		j = pop(p);
+		printf("%d ",j);
+	}
+	
+	
+}
